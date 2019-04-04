@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+<testng-results skipped="0" failed="0" ignored="0" total="2" passed="2">
   <reporter-output>
   </reporter-output>
-  <suite name="Suite" duration-ms="25" started-at="2019-04-04T09:53:57Z" finished-at="2019-04-04T09:53:57Z">
+  <suite name="Suite" duration-ms="29" started-at="2019-04-04T10:11:47Z" finished-at="2019-04-04T10:11:47Z">
     <groups>
     </groups>
-    <test name="Test" duration-ms="25" started-at="2019-04-04T09:53:57Z" finished-at="2019-04-04T09:53:57Z">
+    <test name="Test" duration-ms="29" started-at="2019-04-04T10:11:47Z" finished-at="2019-04-04T10:11:47Z">
+      <class name="Git.Eclipse.Class_B">
+        <test-method status="PASS" signature="Method_B()[pri:0, instance:Git.Eclipse.Class_B@7722c3c3]" name="Method_B" duration-ms="2" started-at="2019-04-04T10:11:47Z" finished-at="2019-04-04T10:11:47Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Method_B -->
+      </class> <!-- Git.Eclipse.Class_B -->
       <class name="Git.Eclipse.Class_A">
-        <test-method status="PASS" signature="Method_A()[pri:0, instance:Git.Eclipse.Class_A@708f5957]" name="Method_A" duration-ms="8" started-at="2019-04-04T09:53:57Z" finished-at="2019-04-04T09:53:57Z">
+        <test-method status="PASS" signature="Method_A()[pri:0, instance:Git.Eclipse.Class_A@68999068]" name="Method_A" duration-ms="9" started-at="2019-04-04T10:11:47Z" finished-at="2019-04-04T10:11:47Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Method_A -->
