@@ -6,7 +6,7 @@ public class Class_A {
 
 	
 	@Test
-	public void Method_A()
+	static public void Method_A()
 	{
 		System.out.println("Class A Outout");
 	}

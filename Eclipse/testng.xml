@@ -4,6 +4,7 @@
   <test thread-count="5" name="Test">
     <classes>
       <class name="Git.Eclipse.Class_A"/>
+      <class name="Git.Eclipse.Class_B"/>
       <class name="Git.Eclipse.AppTest"/>
     </classes>
   </test> <!-- Test -->
