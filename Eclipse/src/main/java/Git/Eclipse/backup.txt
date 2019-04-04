@@ -1,0 +1,243 @@
+CREATE PROCEDURE [dbo].[ng_sp_communication_fetch]        
+  
+(        
+  
+ @pi_communication_id uniqueidentifier,  
+  
+ @pi_recipient_id  uniqueidentifier = null         
+  
+)     
+  
+/****************************************************************************    
+  
+Procedure: ng_sp_communication_fetch   
+  
+Fetch communication data based on the id provided     
+  
+  
+  
+@pi_communication_id - communication id for displaying data  
+  
+@pi_recipient_id  - recepient id  
+  
+   
+  
+Version             Date         Name                Description    
+  
+=======             ==========   ==============      ===========    
+  
+Initial    05/21/2013  SarunMK    New procedure    
+  
+2.3     07/29/2015  SarunMK    Added NULL check for Body  
+  
+5.9     11/28/2015  Anup Das Gupta   Added comm_category and clinically_relevent field in the select query  
+  
+2.5     01/05/2018   Venkat G    Added alias_name and online_identity_id field in select query  
+  
+*****************************************************************************/       
+  
+AS        
+  
+BEGIN        
+  
+ --communication        
+  
+ SELECT         
+  
+  nc.comm_id,        
+  
+  nc.parent_id,        
+  
+  nc.practice_id,        
+  
+  nc.nx_practice_id,        
+  
+  nc.sender_id,        
+  
+  nc.sender_name,        
+  
+  nc.sender_type,        
+  
+  nc.sent_when,        
+  
+  nc.received_when,        
+  
+  nc.replied_when,        
+  
+  nc.priority_flag,        
+  
+  nc.source,        
+  
+  nc.subject,        
+  
+  isnull(nc.body, '') as body,        
+  
+  nc.read_receipt,        
+  
+  nc.create_timestamp,        
+  
+  nc.created_by,        
+  
+  nc.modify_timestamp,        
+  
+  nc.modified_by,        
+  
+  nc.row_timestamp,        
+  
+  nc.encounter_id,        
+  
+  nc.completed_status,        
+  
+  nc.proxy_id,        
+  
+  nc.unread_notify_flag,        
+  
+  nc.unread_sent_notif_flag,        
+  
+  isnull(nc.unread_notif_interval, 0) unread_notif_interval,        
+  
+  nc.delivery_date,   
+  
+  nc.comm_category,  
+  
+  nc.clinically_relevant,       
+  
+  isnull(nc.online_profile_id, '00000000-0000-0000-0000-000000000000') online_profile_id,        
+  
+  nc.online_profile_name,        
+  
+  nc.noreply_ind,    
+  
+  ncr.recipient_id,    
+  
+  ncr.recipient_type,    
+  
+  ncr.name,  
+  
+  isnull(nc.online_identity_id, '00000000-0000-0000-0000-000000000000') online_identity_id,        
+  
+  subcat.alias_name  
+  
+ FROM        
+  
+  ngweb_communications  nc       
+  
+INNER JOIN ngweb_comm_recpts ncr   
+  
+ON nc.comm_id = ncr.comm_id    
+  
+LEFT JOIN ngweb_online_identities oid    ON nc.online_identity_id = oid.row_id  
+  
+LEFT JOIN ngweb_msg_sub_categories subcat    ON oid.msg_sub_category_id = subcat.row_id        
+  
+ WHERE        
+  
+  nc.comm_id = @pi_communication_id        
+  
+ AND        
+  
+  nc.delete_ind = 'N'        
+  
+ AND  
+  
+(@pi_recipient_id IS NULL OR ncr.recipient_id = cast(@pi_recipient_id as varchar(36))  )  
+  
+         
+  
+--attachments          
+  
+ SELECT          
+  
+  row_id,          
+  
+  comm_id,          
+  
+  attachment_type,    
+  
+  Case WHEN doc.file_name = '' OR doc.file_name IS NULL   
+  
+     THEN attachment_name   
+  
+     ELSE doc.file_name END as attachment_name,  
+  
+  A.attachment_id,          
+  
+  attachment_path,  
+  
+  AX.assignment_id,  
+  
+  doc.external_id  
+  
+   
+  
+ FROM          
+  
+  ngweb_comm_attachments A       
+  
+  LEFT OUTER JOIN ngweb_comm_attach_xref AX   
+  
+  ON A.comm_id = AX.parent_id  
+  
+  AND ( A.attachment_id = AX.attachment_id OR cast(A.row_id as varchar(36)) = cast(AX.attachment_id as varchar(36)) )   
+  
+  AND ( @pi_recipient_id IS NULL OR nx_patient_id = cast(@pi_recipient_id as varchar(36)))  
+  
+ LEFT OUTER JOIN document doc   
+  
+  ON  
+  
+  cast(doc.doc_guid  as varchar(36)) = cast(a.attachment_id as varchar(36))  
+  
+ WHERE          
+  
+  comm_id = @pi_communication_id          
+  
+ AND          
+  
+  A.delete_ind = 'N'            
+  
+  
+  
+END   
+  
+  
+  
+GRANT EXECUTE ON object::dbo.ng_sp_communication_fetch to ng_authenticated 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select top * from ngweb_communications where comm_id='FD543FEA-806E-420C-834E-7F34F77B1226'
+
+select * from ngweb_account where username='Beta@Test1'
+--C0A32D0B-4A93-409C-8A25-DFB40B4F30E6
+
+select * from ngweb_comm_recpts where recipient_id='C0A32D0B-4A93-409C-8A25-DFB40B4F30E6' order by create_timestamp desc
+
+EXEC [ng_sp_communication_fetch] 'FD543FEA-806E-420C-834E-7F34F77B1226' , 'C0A32D0B-4A93-409C-8A25-DFB40B4F30E6'
+
+--sp_helptext [ng_sp_communication_fetch]
+
+--sp_helpindex2 document 
+
+select * from ngweb_comm_attachments where comm_id= 'FD543FEA-806E-420C-834E-7F34F77B1226' 
